@@ -31,12 +31,7 @@ function ProjectCard({
         <PlusIcon className="absolute -bottom-2 -left-2 z-10 h-4 w-4 sm:-bottom-3 sm:-left-3 sm:h-6 sm:w-6 text-white" />
         <PlusIcon className="absolute -bottom-2 -right-2 z-10 h-4 w-4 sm:-bottom-3 sm:-right-3 sm:h-6 sm:w-6 text-white" />
 
-        <motion.div
-          whileHover={{ y: -4 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-          style={{ willChange: "transform" }}
-          className="group relative flex h-full flex-col overflow-hidden rounded-none border border-white/10 bg-transparent"
-        >
+        <motion.div className="group relative flex h-full flex-col overflow-hidden rounded-none border border-white/10 bg-transparent">
         {/* ---- Lightweight static gradient background (replaces FlickeringGrid) ---- */}
         <div
           className="pointer-events-none absolute inset-0 z-0"
@@ -49,7 +44,7 @@ function ProjectCard({
         <div className="p-1">
           {/* Image / Video area with Lens */}
           <div className="relative overflow-hidden">
-            <Lens zoomFactor={1.5} lensSize={140} lensColor="black">
+            <Lens zoomFactor={1.9} lensSize={140} lensColor="black">
               <div className="relative aspect-16/10 w-full overflow-hidden bg-black/40">
                 {project.video ? (
                   <video
