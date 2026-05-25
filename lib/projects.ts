@@ -14,7 +14,7 @@ export const projects: Project[] = [
   {
     title: "Studio Manager",
     description:
-      "Sistema para gestão de studios e negócios, com foco em agendamentos, serviços, clientes e organização da rotina.",
+      "Studio and business management system focused on scheduling, services, clients and daily workflow organization.",
     image: "/projects/studio-manager/studio-manager-dashboard-desktop.png",
     githubUrl: "https://github.com/lucascanutoo/studio-manager",
     tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Node.js", "PostgreSQL"],

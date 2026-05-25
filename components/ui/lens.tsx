@@ -1,7 +1,7 @@
 "use client"
 
-import React, { useCallback, useMemo, useRef, useState } from "react"
-import { AnimatePresence, motion, useMotionTemplate } from "motion/react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { AnimatePresence, motion, useMotionTemplate, useMotionValue } from "motion/react"
 
 interface Position {
   /** The x coordinate of the lens */
@@ -50,22 +50,48 @@ export function Lens({
   }
 
   const [isHovering, setIsHovering] = useState(false)
-  const [mousePosition, setMousePosition] = useState<Position>(position)
-  const containerRef = useRef<HTMLDivElement>(null)
+  const initialPosition = defaultPosition ?? position
+  const mouseX = useMotionValue(initialPosition.x)
+  const mouseY = useMotionValue(initialPosition.y)
+  const frameRef = useRef<number | null>(null)
+  const pendingPositionRef = useRef<Position | null>(null)
 
-  const currentPosition = useMemo(() => {
-    if (isStatic) return position
-    if (defaultPosition && !isHovering) return defaultPosition
-    return mousePosition
-  }, [isStatic, position, defaultPosition, isHovering, mousePosition])
+  useEffect(() => {
+    if (isStatic) {
+      mouseX.set(position.x)
+      mouseY.set(position.y)
+    } else if (defaultPosition && !isHovering) {
+      mouseX.set(defaultPosition.x)
+      mouseY.set(defaultPosition.y)
+    }
+  }, [defaultPosition, isHovering, isStatic, mouseX, mouseY, position])
+
+  useEffect(() => () => {
+    if (frameRef.current !== null) {
+      cancelAnimationFrame(frameRef.current)
+    }
+  }, [])
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (isStatic) return
+
     const rect = e.currentTarget.getBoundingClientRect()
-    setMousePosition({
+    pendingPositionRef.current = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
+    }
+
+    if (frameRef.current !== null) return
+
+    frameRef.current = requestAnimationFrame(() => {
+      const nextPosition = pendingPositionRef.current
+      if (nextPosition) {
+        mouseX.set(nextPosition.x)
+        mouseY.set(nextPosition.y)
+      }
+      frameRef.current = null
     })
-  }, [])
+  }, [isStatic, mouseX, mouseY])
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Escape") setIsHovering(false)
@@ -73,13 +99,10 @@ export function Lens({
 
   const maskImage = useMotionTemplate`radial-gradient(circle ${
     lensSize / 2
-  }px at ${currentPosition.x}px ${
-    currentPosition.y
-  }px, ${lensColor} 100%, transparent 100%)`
+  }px at ${mouseX}px ${mouseY}px, ${lensColor} 100%, transparent 100%)`
+  const transformOrigin = useMotionTemplate`${mouseX}px ${mouseY}px`
 
   const LensContent = useMemo(() => {
-    const { x, y } = currentPosition
-
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.58 }}
@@ -90,28 +113,32 @@ export function Lens({
         style={{
           maskImage,
           WebkitMaskImage: maskImage,
-          transformOrigin: `${x}px ${y}px`,
+          transformOrigin,
           zIndex: 50,
+          willChange: "mask-image, opacity, transform",
         }}
       >
-        <div
+        <motion.div
           className="absolute inset-0"
           style={{
             transform: `scale(${zoomFactor})`,
-            transformOrigin: `${x}px ${y}px`,
+            transformOrigin,
+            willChange: "transform",
           }}
         >
           {children}
-        </div>
+        </motion.div>
       </motion.div>
     )
-  }, [currentPosition, lensSize, lensColor, zoomFactor, children, duration])
+  }, [children, duration, maskImage, transformOrigin, zoomFactor])
 
   return (
     <div
-      ref={containerRef}
       className="relative z-20 overflow-hidden"
-      onMouseEnter={() => setIsHovering(true)}
+      onMouseEnter={(e) => {
+        setIsHovering(true)
+        handleMouseMove(e)
+      }}
       onMouseLeave={() => setIsHovering(false)}
       onMouseMove={handleMouseMove}
       onKeyDown={handleKeyDown}

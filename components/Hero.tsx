@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { LineShadowText } from "./ui/line-shadow-text";
 import dynamic from "next/dynamic";
@@ -21,6 +22,19 @@ export default function Hero({ data }: { data?: HeroData }) {
   const tagline = data?.tagline || "Full-stack developer focused on building fast, polished, and reliable digital products.";
   const splineUrl = data?.splineUrl || "https://prod.spline.design/AeryvEqWxr2qjINc/scene.splinecode";
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const [isSplineReady, setIsSplineReady] = useState(false);
+
+  useEffect(() => {
+    if (!isDesktop || isSplineReady) return;
+
+    if ("requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(() => setIsSplineReady(true), { timeout: 1200 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = globalThis.setTimeout(() => setIsSplineReady(true), 250);
+    return () => globalThis.clearTimeout(timeoutId);
+  }, [isDesktop, isSplineReady]);
 
   return (
     <section
@@ -94,7 +108,7 @@ export default function Hero({ data }: { data?: HeroData }) {
           </div>
 
           {/* Spline — desktop only */}
-          {isDesktop && (
+          {isDesktop && isSplineReady && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}

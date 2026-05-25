@@ -19,13 +19,20 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
         <Particles
           className="fixed inset-0 -z-10"
           variant="snow"
-          style={isDesktop ? undefined : { count: 48, size: 1, speed: 0.5, opacity: 0.35 }}
-          customOptions={isDesktop ? undefined : {
+          style={isDesktop
+            ? { count: 160, size: 1.1, speed: 0.8, opacity: 0.5 }
+            : { count: 48, size: 1, speed: 0.5, opacity: 0.35 }}
+          customOptions={{
             detectRetina: false,
-            fpsLimit: 30,
+            fpsLimit: isDesktop ? 60 : 30,
             particles: {
               move: {
-                speed: { min: 0.25, max: 0.65 },
+                speed: isDesktop ? { min: 1, max: 1.8 } : { min: 0.25, max: 0.65 },
+              },
+              opacity: {
+                animation: {
+                  speed: 1,
+                },
               },
             },
           }}
