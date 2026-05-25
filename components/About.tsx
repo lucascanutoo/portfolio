@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "motion/react";
-import Image from "next/image";
 import { OrbitingCircles } from "@/components/ui/orbiting-circles";
 import { Monitor, Server, Layers, Network, Bot } from "lucide-react";
 
@@ -55,13 +54,16 @@ export default function About({ data }: { data?: AboutData }) {
           >
             {/* Center avatar */}
             <div className="relative z-10 flex h-32 w-32 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-white/5 shadow-2xl shadow-white/5 backdrop-blur-sm sm:h-32 sm:w-32">
-              <Image
-                src="/avatar.jpg"
-                alt="Lucas"
-                width={128}
-                height={128}
-                className="h-full w-full rounded-full object-cover crop-center"
-              />
+              <div
+                aria-label="Lucas Canuto"
+                className="relative flex h-full w-full items-center justify-center rounded-full bg-linear-to-br from-slate-950 via-neutral-900 to-indigo-950"
+              >
+                <div className="absolute inset-2 rounded-full border border-white/8 bg-[radial-gradient(circle_at_35%_30%,rgba(96,165,250,0.18),transparent_58%)]" />
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_center,rgba(167,139,250,0.1),transparent_68%)]" />
+                <span className="relative font-mono text-3xl font-semibold tracking-[0.16em] text-white/90">
+                  LC
+                </span>
+              </div>
             </div>
 
             {/* Inner orbit */}
