@@ -5,6 +5,7 @@ import {
   initParticlesEngine,
   Particles as TSParticles,
 } from "@tsparticles/react"
+import type { ISourceOptions } from "@tsparticles/engine"
 import { loadSlim } from "@tsparticles/slim"
 
 import { cn } from "@/lib/utils"
@@ -219,23 +220,27 @@ export function Particles({
     },
   }
 
-  const deepMerge = (target: any, source: any) => {
+  const isObject = (value: unknown): value is Record<string, unknown> =>
+    typeof value === "object" && value !== null && !Array.isArray(value)
+
+  const deepMerge = (
+    target: Record<string, unknown>,
+    source: Record<string, unknown>
+  ): Record<string, unknown> => {
     const output = { ...target }
-    if (source) {
-      Object.keys(source).forEach((key) => {
-        if (source[key] instanceof Object && key in target) {
-          output[key] = deepMerge(target[key], source[key])
-        } else {
-          output[key] = source[key]
-        }
-      })
-    }
+    Object.keys(source).forEach((key) => {
+      if (isObject(source[key]) && isObject(target[key])) {
+        output[key] = deepMerge(target[key], source[key])
+      } else {
+        output[key] = source[key]
+      }
+    })
     return output
   }
 
   const variantOptions = baseStyle.options || {}
   const mergedOptions = deepMerge(defaultOptions, variantOptions)
-  const finalOptions = deepMerge(mergedOptions, customOptions)
+  const finalOptions = deepMerge(mergedOptions, customOptions) as ISourceOptions
 
   return (
     isInitialized && (

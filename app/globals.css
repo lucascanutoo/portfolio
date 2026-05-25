@@ -209,9 +209,10 @@ canvas + a[href*="spline"], canvas ~ a[href*="spline"] { display: none !importan
 }
 
 .hero-orb {
-  background: radial-gradient(circle at 40% 40%, #60a5fa 0%, #a78bfa 40%, #f472b6 70%, transparent 100%);
+  background: radial-gradient(circle at 40% 40%, rgb(96 165 250 / 0.16) 0%, rgb(167 139 250 / 0.1) 38%, rgb(244 114 182 / 0.04) 58%, transparent 74%);
   animation: orb-pulse 4s ease-in-out infinite, orb-rotate 12s linear infinite;
-  filter: blur(24px);
+  border-radius: 9999px;
+  filter: blur(18px);
 }
 
 /* ---- Shimmer effect for skill cards ---- */

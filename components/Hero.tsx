@@ -2,9 +2,11 @@
 
 import { motion } from "motion/react";
 import { LineShadowText } from "./ui/line-shadow-text";
-import Spline from "@splinetool/react-spline";
+import dynamic from "next/dynamic";
 import { SplineErrorBoundary } from "./SplineErrorBoundary";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+
+const SplineRobot = dynamic(() => import("./SplineRobot"), { ssr: false });
 
 interface HeroData {
   greeting: string;
@@ -25,6 +27,10 @@ export default function Hero({ data }: { data?: HeroData }) {
       id="hero"
       className="relative flex min-h-screen w-full items-center overflow-hidden"
     >
+      <div
+        aria-hidden="true"
+        className="hero-orb pointer-events-none absolute left-1/2 top-[43%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 sm:h-80 sm:w-80 md:hidden"
+      />
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-24 sm:px-10 lg:px-16">
         <div className="flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:justify-between">
           {/* Text content — centered on mobile, left-aligned on desktop */}
@@ -97,7 +103,7 @@ export default function Hero({ data }: { data?: HeroData }) {
             >
               <div className="h-full w-full scale-125 pointer-events-none">
                 <SplineErrorBoundary>
-                  <Spline scene={splineUrl} />
+                  <SplineRobot scene={splineUrl} />
                 </SplineErrorBoundary>
               </div>
             </motion.div>
