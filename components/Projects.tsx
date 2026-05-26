@@ -31,7 +31,7 @@ function ProjectCard({
         <PlusIcon className="absolute -bottom-2 -left-2 z-10 h-4 w-4 sm:-bottom-3 sm:-left-3 sm:h-6 sm:w-6 text-white" />
         <PlusIcon className="absolute -bottom-2 -right-2 z-10 h-4 w-4 sm:-bottom-3 sm:-right-3 sm:h-6 sm:w-6 text-white" />
 
-        <motion.div className="group relative flex h-full flex-col overflow-hidden rounded-none border border-white/10 bg-transparent">
+        <motion.div className="group relative flex h-full flex-col overflow-hidden rounded-none border border-white/10 bg-transparent transition-all duration-300 hover:border-white/30 hover:shadow-lg hover:-translate-y-1" style={{boxShadow: "0 0 0 0 rgba(255,255,255,0)"}}>
         {/* ---- Lightweight static gradient background (replaces FlickeringGrid) ---- */}
         <div
           className="pointer-events-none absolute inset-0 z-0"
@@ -45,7 +45,7 @@ function ProjectCard({
           {/* Image / Video area with Lens */}
           <div className="relative overflow-hidden">
             <Lens zoomFactor={1.9} lensSize={140} lensColor="black">
-              <div className="relative aspect-16/10 w-full overflow-hidden bg-black/40">
+              <div className="relative aspect-16/10 w-full overflow-hidden bg-black/40 transition-transform duration-300 group-hover:scale-105">
                 {project.video ? (
                   <video
                     src={project.video}
@@ -60,7 +60,7 @@ function ProjectCard({
                     src={project.image}
                     alt={project.title}
                     fill
-                    className="object-contain"
+                    className="object-cover"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (
@@ -135,9 +135,9 @@ function ProjectCard({
 
         {/* ---- Subtle gradient glow on hover ---- */}
         <div
-          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style={{
-            background: `radial-gradient(600px circle at 50% 0%, ${project.accentColor}08, transparent 60%)`,
+            background: `radial-gradient(600px circle at 50% 0%, ${project.accentColor}10, transparent 60%)`,
           }}
         />
       </motion.div>
