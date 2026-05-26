@@ -2,7 +2,7 @@
 
 Um portfólio moderno e interativo construído com tecnologias web de ponta, apresentando projetos e habilidades em full-stack development.
 
-## 🚀 Tecnologias
+## Tecnologias
 
 **Frontend:**
 - [Next.js 16](https://nextjs.org) - Framework React com SSR/SSG
@@ -22,7 +22,7 @@ Um portfólio moderno e interativo construído com tecnologias web de ponta, apr
 - [ESLint](https://eslint.org) - Linting
 - [tsx](https://tsx.is) - Execução TypeScript
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 app/
@@ -32,7 +32,7 @@ app/
 └── api/               # Rotas API (autenticação, emails, etc)
 ```
 
-## ✨ Destaques
+## Destaques
 
 - **Design Responsivo**: Funciona perfeitamente em mobile, tablet e desktop
 - **Animações Dinâmicas**: Efeitos de partículas e transições suaves
