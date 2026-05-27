@@ -1,13 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { LineShadowText } from "./ui/line-shadow-text";
-import dynamic from "next/dynamic";
-import { SplineErrorBoundary } from "./SplineErrorBoundary";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-
-const SplineRobot = dynamic(() => import("./SplineRobot"), { ssr: false });
 
 interface HeroData {
   greeting: string;
@@ -20,21 +14,6 @@ export default function Hero({ data }: { data?: HeroData }) {
   const greeting = data?.greeting || "Hey, I'm";
   const name = data?.name || "Lucas";
   const tagline = data?.tagline || "Full-stack developer focused on building fast, polished, and reliable digital products.";
-  const splineUrl = data?.splineUrl || "https://prod.spline.design/AeryvEqWxr2qjINc/scene.splinecode";
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [isSplineReady, setIsSplineReady] = useState(false);
-
-  useEffect(() => {
-    if (!isDesktop || isSplineReady) return;
-
-    if ("requestIdleCallback" in window) {
-      const idleId = window.requestIdleCallback(() => setIsSplineReady(true), { timeout: 1200 });
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timeoutId = globalThis.setTimeout(() => setIsSplineReady(true), 250);
-    return () => globalThis.clearTimeout(timeoutId);
-  }, [isDesktop, isSplineReady]);
 
   return (
     <section
@@ -43,12 +22,11 @@ export default function Hero({ data }: { data?: HeroData }) {
     >
       <div
         aria-hidden="true"
-        className="hero-orb pointer-events-none absolute left-1/2 top-[43%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 sm:h-80 sm:w-80 md:hidden"
+        className="hero-orb pointer-events-none absolute left-1/2 top-[43%] h-72 w-72 -translate-x-1/2 -translate-y-1/2 sm:h-80 sm:w-80"
       />
       <div className="relative z-10 mx-auto w-full max-w-6xl px-6 py-24 sm:px-10 lg:px-16">
-        <div className="flex flex-col items-center gap-16 lg:flex-row lg:items-center lg:justify-between">
-          {/* Text content — centered on mobile, left-aligned on desktop */}
-          <div className="max-w-xl space-y-6 text-center lg:text-left">
+        <div className="flex flex-col items-center gap-16">
+          <div className="max-w-xl space-y-6 text-center">
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -84,7 +62,7 @@ export default function Hero({ data }: { data?: HeroData }) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="flex flex-wrap items-center justify-center gap-4 pt-2 lg:justify-start"
+              className="flex flex-wrap items-center justify-center gap-4 pt-2"
             >
               <button
                 onClick={() => {
@@ -106,22 +84,6 @@ export default function Hero({ data }: { data?: HeroData }) {
               </button>
             </motion.div>
           </div>
-
-          {/* Spline — desktop only */}
-          {isDesktop && isSplineReady && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.4 }}
-              className="relative flex items-center justify-center h-64 w-64 sm:h-80 sm:w-80 lg:h-96 lg:w-96"
-            >
-              <div className="h-full w-full scale-125 pointer-events-none">
-                <SplineErrorBoundary>
-                  <SplineRobot scene={splineUrl} />
-                </SplineErrorBoundary>
-              </div>
-            </motion.div>
-          )}
         </div>
       </div>
     </section>
